@@ -1,37 +1,27 @@
-
 # Project Blueprint
 
 ## Overview
 
-This document outlines the plan for developing a responsive and professional Angular application. The goal is to create a visually appealing and intuitive user experience that works seamlessly across desktops, tablets, and mobile devices.
+This document outlines the plan for resolving the scrolling issue in the application. The previous approach of making small, incremental changes has been unsuccessful. This new plan involves a radical simplification of the application to its bare essentials, followed by a methodical, step-by-step rebuild. This will allow for the precise identification of the root cause of the scrolling issue.
 
-## Implemented Features
+## Phase 1: Radical Simplification
 
-*   **Initial Setup:** Basic Angular application structure.
-*   **Build Fixes:** Corrected template paths and missing module imports to ensure a successful build.
+1.  **Strip `app.component.ts`:** Remove all existing components and styles from `app.component.ts`.
+2.  **Create a Minimal Scrolling Container:** In `app.component.ts`, create a simple `div` with a fixed height and `overflow-y: auto`.
+3.  **Add Content:** Populate the `div` with enough content to force a scrollbar to appear.
+4.  **Build and Verify:** Compile the application and confirm that the scrollbar is visible and functional.
 
-## Current Plan: Responsive Design
+## Phase 2: Incremental Rebuild
 
-### Phase 1: Responsive App Layout
+1.  **Re-introduce `app-layout.component.ts`:** Add the `app-layout` component back into `app.component.ts`, but with a simplified template and minimal styles.
+2.  **Test Scrolling:** Verify that the scrollbar still functions as expected.
+3.  **Re-introduce `nav-menu.component.ts`:** Add the `nav-menu` component into `app-layout.component.ts`, again with a simplified template and styles.
+4.  **Test Scrolling:** Verify that the scrollbar still functions as expected.
+5.  **Iteratively Add Styles:** One by one, re-introduce the original styles to `app-layout.component.ts` and `nav-menu.component.ts`, testing the scrollbar after each change.
+6.  **Isolate the Culprit:** This iterative process will reveal the exact style or combination of styles that is causing the scrolling issue.
 
-*   **Goal:** Create a collapsible sidebar for improved usability on smaller screens.
-*   **Steps:**
-    1.  Introduce a toggle button to control the visibility of the navigation menu.
-    2.  Use an Angular signal to manage the open/closed state of the sidebar.
-    3.  Implement CSS to position the sidebar off-screen by default on mobile devices.
-    4.  Add a smooth transition effect for the sidebar's appearance and disappearance.
-    5.  The sidebar will be permanently visible on larger screens.
+## Phase 3: Final Solution
 
-### Phase 2: Responsive Header
-
-*   **Goal:** Adapt the header content for various screen sizes.
-*   **Steps:**
-    1.  Make the search bar's width flexible to prevent overflow.
-    2.  Adjust the spacing and layout of user menu items for smaller screens.
-
-### Phase 3: Responsive Data Tables
-
-*   **Goal:** Ensure data tables are readable and accessible on mobile devices.
-*   **Steps:**
-    1.  Transform the traditional table layout into a card-based list on smaller screens.
-    2.  Each card will represent a row, with data labels for clarity.
+1.  **Implement a Robust Fix:** Once the problematic style is identified, implement a permanent and reliable solution. This may involve using `calc()`, flexbox, or other CSS techniques to ensure proper height calculation.
+2.  **Restore Original Functionality:** Restore all original components and styles, ensuring that the application is fully functional and visually identical to the original design.
+3.  **Final Verification:** Perform a final build and thorough testing to confirm that the scrolling issue is resolved and that no new issues have been introduced.

@@ -22,6 +22,14 @@ export const routes: Routes = [
         loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
     },
     {
+        path: 'ketchup',
+        loadComponent: () => import('./ketchup.component').then(m => m.KetchupComponent)
+    },
+    {
+        path: 'mustard',
+        loadComponent: () => import('./mustard.component').then(m => m.MustardComponent)
+    },
+    {
         path: 'project-1',
         loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
     },
