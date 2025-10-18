@@ -1,0 +1,33 @@
+.dashboard-container {
+  padding: 2rem;
+}
+
+.dashboard-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.widget {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.widget h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.widget p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  margin: 0;
+}

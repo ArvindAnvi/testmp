@@ -1,0 +1,17 @@
+<div class="popup-overlay" (click)="close.emit()">
+  <div class="popup-container" (click)="$event.stopPropagation()">
+    <div class="popup-header">
+      <h3>Settings</h3>
+      <button class="close-button" (click)="close.emit()">&times;</button>
+    </div>
+    <div class="popup-content">
+      <ul>
+        <li><a routerLink="/settings/profile">Profile</a></li>
+        <li><a routerLink="/settings/account">Account</a></li>
+        <li><a routerLink="/settings/notifications">Notifications</a></li>
+        <li><a routerLink="/settings/theme">Theme</a></li>
+        <li><a routerLink="/settings/security">Security</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

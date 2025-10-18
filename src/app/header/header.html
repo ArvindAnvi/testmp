@@ -1,18 +1,21 @@
 <div class="header-container">
   <div class="logo">
-    <i class="fas fa-bars"></i>
-    <span>Microsoft Azure</span>
+    <i class="fab fa-angular fa-2x"></i>
+    <h2>My App</h2>
   </div>
   <div class="search-bar">
-    <input type="text" placeholder="Search resources, services, and docs (G+/)">
+    <input type="text" placeholder="Search...">
   </div>
   <div class="user-menu">
-    <i class="fas fa-question-circle"></i>
-    <i class="fas fa-cog"></i>
     <i class="fas fa-bell"></i>
+    <i class="fas fa-cog" (click)="toggleSettingsPopup()"></i>
     <div class="user-info">
-      <span>arvind240719@gmail.co...</span>
-      <span>DEFAULT DIRECTORY (ARVIND24...</span>
+      <span>John Doe</span>
+      <span>Administrator</span>
     </div>
   </div>
 </div>
+
+@if (showSettingsPopup()) {
+  <app-settings-popup (close)="toggleSettingsPopup()" />
+}

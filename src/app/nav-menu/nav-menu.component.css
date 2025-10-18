@@ -1,0 +1,33 @@
+.nav-menu-container {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #dee2e6;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav a {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #212529;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #e9ecef;
+}
+
+nav a.active {
+  background-color: #0d6efd;
+  color: white;
+}

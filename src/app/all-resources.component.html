@@ -1,0 +1,22 @@
+<h1>All Resources</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Location</th>
+      <th>Subscription</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (resource of resources(); track resource.name) {
+      <tr>
+        <td>{{ resource.name }}</td>
+        <td>{{ resource.type }}</td>
+        <td>{{ resource.location }}</td>
+        <td>{{ resource.subscription }}</td>
+      </tr>
+    }
+  </tbody>
+</table>

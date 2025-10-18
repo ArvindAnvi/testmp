@@ -1,8 +1,8 @@
 
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header';
 import { SidebarComponent } from './sidebar/sidebar';
-import { MainContentComponent } from './main-content/main-content';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +11,11 @@ import { MainContentComponent } from './main-content/main-content';
       <app-header />
       <div class="main-container">
         <app-sidebar />
-        <app-main-content />
+        <router-outlet />
       </div>
     </div>
   `,
-  imports: [HeaderComponent, SidebarComponent, MainContentComponent],
+  imports: [HeaderComponent, SidebarComponent, RouterOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}

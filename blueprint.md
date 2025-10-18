@@ -1,30 +1,22 @@
-
-# Azure Portal Clone Blueprint
+# Project Blueprint
 
 ## Overview
 
-This project is a web application designed to replicate the user interface of the Microsoft Azure portal. It features a responsive layout with a header, a collapsible sidebar for navigation, and a main content area for displaying information and resources. The application is built using modern web technologies to ensure a seamless and intuitive user experience.
+A simple single-page application (SPA) with a side navigation menu and a content area. The application is built with modern Angular (v20+), using standalone components, signals, and the new control flow syntax.
 
 ## Style, Design, and Features
 
-### Layout
-- **Header:** A fixed header containing the application logo, a search bar, and user menu options.
-- **Sidebar:** A collapsible navigation sidebar with icons and labels for accessing different sections of the application.
-- **Main Content:** A flexible content area that displays the main information and tables.
+*   **Architecture:** Standalone components, `OnPush` change detection.
+*   **Routing:** Lazy-loaded routes for different sections of the app.
+*   **UI:** A simple and clean user interface. A left-side navigation menu and a main content area.
+    *   The navigation menu lists the available routes.
+    *   The main content area displays the component for the currently active route.
+*   **Styling:** Basic CSS for layout and styling. No complex design system.
 
-### Styling
-- **Color Palette:** A professional color scheme inspired by the Azure portal, with shades of blue, gray, and white.
-- **Typography:** Clear and legible fonts for easy readability.
-- **Icons:** Font Awesome icons to provide visual cues and enhance navigation.
+## Current Request: Implement Page Content
 
-### Features
-- **Responsive Design:** The layout adapts to different screen sizes, making it accessible on both desktop and mobile devices.
-- **Interactive Elements:** Buttons and interactive elements with hover effects for improved user engagement.
-- **Data Tables:** Clean and organized tables for displaying resource information.
-
-## Current Plan
-
-### Phase 1: Initial Setup and UI Mockup
-- [x] Set up the basic application structure with a header, sidebar, and main content area.
-- [x] Create a static UI mockup that closely resembles the Azure portal's layout and design.
-- [x] Ensure the application is responsive and visually consistent across different devices.
+*   **Plan:** The user has pointed out that the pages are empty. The plan is to add unique content to each page to demonstrate that the routing is working correctly.
+*   **Steps:**
+    1.  Add a unique heading and paragraph to each of the 11 page components.
+    2.  Rebuild the application to apply the changes.
+    3.  Deploy the application for review.

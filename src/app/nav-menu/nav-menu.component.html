@@ -1,0 +1,12 @@
+<div class="nav-menu-container">
+  <h3>Menu</h3>
+  <nav>
+    <ul>
+      @for (item of menuItems(); track item.path) {
+        <li>
+          <a [routerLink]="item.path" routerLinkActive="active">{{ item.label }}</a>
+        </li>
+      }
+    </ul>
+  </nav>
+</div>

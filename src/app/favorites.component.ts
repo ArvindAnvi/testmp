@@ -1,0 +1,12 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-favorites',
+  standalone: true,
+  imports: [CommonModule],
+  template: `<p>favorites works!</p>`,
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class FavoritesComponent {}

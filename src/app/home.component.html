@@ -1,0 +1,56 @@
+<div class="home-grid">
+  <div class="card" (click)="navigateTo('/dashboard')">
+    <div class="card-header">
+      <i class="bi bi-grid"></i>
+      <h3>Dashboard</h3>
+    </div>
+    <div class="card-body">
+      <p>Go to your dashboard</p>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/resources')">
+    <div class="card-header">
+      <i class="bi bi-collection"></i>
+      <h3>All Resources</h3>
+    </div>
+    <div class="card-body">
+      <p>View all your resources</p>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/favorites')">
+    <div class="card-header">
+      <i class="bi bi-star"></i>
+      <h3>Favorites</h3>
+    </div>
+    <div class="card-body">
+      <p>Access your favorite resources</p>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/tags')">
+    <div class="card-header">
+      <i class="bi bi-tag"></i>
+      <h3>Tags</h3>
+    </div>
+    <div class="card-body">
+      <p>Manage your resource tags</p>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/organization')">
+    <div class="card-header">
+      <i class="bi bi-building"></i>
+      <h3>Organization</h3>
+    </div>
+    <div class="card-body">
+      <p>Manage your organization</p>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/service-groups')">
+    <div class="card-header">
+      <i class="bi bi-hdd-stack"></i>
+      <h3>Service Groups</h3>
+    </div>
+    <div class="card-body">
+      <p>Manage your service groups</p>
+    </div>
+  </div>
+</div>
