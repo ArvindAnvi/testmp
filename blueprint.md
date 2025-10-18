@@ -13,10 +13,11 @@ A simple single-page application (SPA) with a side navigation menu and a content
     *   The main content area displays the component for the currently active route.
 *   **Styling:** Basic CSS for layout and styling. No complex design system.
 
-## Current Request: Implement Page Content
+## Current Request: Add Mock Data to All Resources Page
 
-*   **Plan:** The user has pointed out that the pages are empty. The plan is to add unique content to each page to demonstrate that the routing is working correctly.
+*   **Plan:** The user wants to populate the "All Resources" page with a significant amount of data to simulate a real-world scenario.
 *   **Steps:**
-    1.  Add a unique heading and paragraph to each of the 11 page components.
-    2.  Rebuild the application to apply the changes.
-    3.  Deploy the application for review.
+    1.  Define a data structure (interface) for a "resource".
+    2.  Generate an array of 100 mock resource objects.
+    3.  Update the `all-resources` component's template to display the data in a table.
+    4.  Rebuild the application.
