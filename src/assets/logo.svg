@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M50,2.5A47.5,47.5,0,1,1,2.5,50,47.5,47.5,0,0,1,50,2.5M50,0A50,50,0,1,0,100,50,50,50,0,0,0,50,0Z" fill="#007bff"/>
+  <path d="M50,15a35,35,0,1,1-35,35A35,35,0,0,1,50,15m0-2.5A37.5,37.5,0,1,0,87.5,50,37.5,37.5,0,0,0,50,12.5Z" fill="#ffffff"/>
+  <text x="50" y="60" font-family="Arial, sans-serif" font-size="40" fill="#333" text-anchor="middle">A</text>
+</svg>

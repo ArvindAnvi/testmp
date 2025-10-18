@@ -1,15 +1,17 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AppLayoutComponent } from './app-layout/app-layout';
+import { Component } from '@angular/core';
+import { AppLayoutComponent } from './app-layout/app-layout.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, AppLayoutComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [AppLayoutComponent],
+  template: `<app-layout></app-layout>`,
+  styles: [`
+    :host {
+      display: block;
+      height: 100vh;
+    }
+  `]
 })
 export class AppComponent {
-  title = 'myapp';
+  title = 'azure-portal-clone';
 }

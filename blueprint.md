@@ -1,23 +1,37 @@
+
 # Project Blueprint
 
 ## Overview
 
-A simple single-page application (SPA) with a side navigation menu and a content area. The application is built with modern Angular (v20+), using standalone components, signals, and the new control flow syntax.
+This document outlines the plan for developing a responsive and professional Angular application. The goal is to create a visually appealing and intuitive user experience that works seamlessly across desktops, tablets, and mobile devices.
 
-## Style, Design, and Features
+## Implemented Features
 
-*   **Architecture:** Standalone components, `OnPush` change detection.
-*   **Routing:** Lazy-loaded routes for different sections of the app.
-*   **UI:** A simple and clean user interface. A left-side navigation menu and a main content area.
-    *   The navigation menu lists the available routes.
-    *   The main content area displays the component for the currently active route.
-*   **Styling:** Basic CSS for layout and styling. No complex design system.
+*   **Initial Setup:** Basic Angular application structure.
+*   **Build Fixes:** Corrected template paths and missing module imports to ensure a successful build.
 
-## Current Request: Add Mock Data to All Resources Page
+## Current Plan: Responsive Design
 
-*   **Plan:** The user wants to populate the "All Resources" page with a significant amount of data to simulate a real-world scenario.
+### Phase 1: Responsive App Layout
+
+*   **Goal:** Create a collapsible sidebar for improved usability on smaller screens.
 *   **Steps:**
-    1.  Define a data structure (interface) for a "resource".
-    2.  Generate an array of 100 mock resource objects.
-    3.  Update the `all-resources` component's template to display the data in a table.
-    4.  Rebuild the application.
+    1.  Introduce a toggle button to control the visibility of the navigation menu.
+    2.  Use an Angular signal to manage the open/closed state of the sidebar.
+    3.  Implement CSS to position the sidebar off-screen by default on mobile devices.
+    4.  Add a smooth transition effect for the sidebar's appearance and disappearance.
+    5.  The sidebar will be permanently visible on larger screens.
+
+### Phase 2: Responsive Header
+
+*   **Goal:** Adapt the header content for various screen sizes.
+*   **Steps:**
+    1.  Make the search bar's width flexible to prevent overflow.
+    2.  Adjust the spacing and layout of user menu items for smaller screens.
+
+### Phase 3: Responsive Data Tables
+
+*   **Goal:** Ensure data tables are readable and accessible on mobile devices.
+*   **Steps:**
+    1.  Transform the traditional table layout into a card-based list on smaller screens.
+    2.  Each card will represent a row, with data labels for clarity.
