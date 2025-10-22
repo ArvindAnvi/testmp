@@ -7,148 +7,237 @@ import { NavMenuComponent } from '../nav-menu/nav-menu.component';
   imports: [RouterModule, NavMenuComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="layout">
-      <div class="menu-container" [class.is-open]="isMenuOpen()">
-        <app-nav-menu (menuItemClicked)="closeMenu()"></app-nav-menu>
-      </div>
-      <main class="main-content">
-        <header class="main-header">
-          <button class="menu-toggle" (click)="toggleMenu()">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#333"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-          </button>
-          <span class="header-title">My App</span>
-        </header>
-        <div class="content-wrapper">
-            <router-outlet></router-outlet>
+    <div class="app-layout">
+      <header class="app-header">
+        <div class="header-left">
+            <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+            <h1>AzureClone</h1>
+        </div>
+        <div class="header-center">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search resources, services, and docs" [value]="searchTerm()" (input)="onSearch($event)">
+                @if (searchTerm()) {
+                  <button class="clear-search-button" (click)="clearSearch()">×</button>
+                }
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-icon" title="Settings">⚙️</button>
+            <button class="header-icon" title="Feedback">💬</button>
+            <button class="header-icon" title="Notifications">🔔</button>
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/30" alt="User Avatar">
+                <div class="user-info">
+                  <span class="user-name">User Name</span>
+                  <span class="user-email">user@example.com</span>
+                </div>
+            </div>
+        </div>
+      </header>
+      <main class="app-main">
+        <app-nav-menu 
+            [isCollapsed]="isMenuCollapsed()" 
+            (menuItemClicked)="onMenuItemClicked()"
+            [searchTerm]="searchTerm()" />
+        <div class="main-content">
+          <router-outlet></router-outlet>
         </div>
       </main>
-      @if (isMenuOpen() && isMobile()) {
-        <div class="overlay" (click)="toggleMenu()"></div>
-      }
     </div>
   `,
   styles: [`
     :host {
-      --menu-width: 260px;
-      --header-height: 60px;
-      --transition-speed: 0.3s;
+      display: block;
+      height: 100vh;
+      width: 100vw;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .layout {
+    .app-layout {
       display: flex;
-      height: 100vh;
-      background-color: #f9f9f9;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background-color: #0078d4;
+      color: white;
+      height: 50px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    
+    .header-left, .header-center, .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header-left {
+        flex: 1 0 auto;
+    }
+    
+    .header-center {
+        flex: 2 1 auto;
+        justify-content: center;
+    }
+
+    .header-right {
+        flex: 1 0 auto;
+        justify-content: flex-end;
     }
 
     .menu-toggle {
-      display: none;
       background: none;
       border: none;
+      color: white;
+      font-size: 1.5rem;
       cursor: pointer;
       padding: 0;
-      margin-right: 15px;
-    }
-    
-    .menu-toggle svg {
-        fill: #333;
-        width: 30px;
-        height: 30px;
     }
 
-    .menu-container {
-      width: var(--menu-width);
-      flex-shrink: 0;
-      background-color: #fff;
-      transition: transform var(--transition-speed) ease, 
-                  width var(--transition-speed) ease;
-      z-index: 1000;
-      height: 100vh;
+    h1 {
+      font-size: 1.25rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .search-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-container input {
+        width: 100%;
+        padding: 8px 40px;
+        border-radius: 4px;
+        border: 1px solid #005a9e;
+        background-color: #005a9e;
+        color: white;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease-in-out;
+    }
+    
+    .search-container input:focus {
+        background-color: #fff;
+        color: #333;
+        outline: none;
+    }
+
+    .search-container input::placeholder {
+        color: #a0c7e8;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0c7e8;
+        z-index: 1;
+    }
+    
+    input:focus ~ .search-icon {
+        color: #333;
+    }
+
+    .clear-search-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #a0c7e8;
+        font-size: 1.2rem;
+        cursor: pointer;
+        line-height: 1;
+    }
+    input:focus ~ .clear-search-button {
+        color: #555;
+    }
+    
+    .header-icon {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+    }
+
+    .header-icon:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .user-profile img {
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+
+    .user-name {
+        font-weight: 600;
+    }
+
+    .user-email {
+        font-size: 0.8rem;
+        color: #d0e8f9;
+    }
+
+    .app-main {
+      display: flex;
+      flex-grow: 1;
+      overflow: hidden;
     }
 
     .main-content {
       flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-    
-    .main-header {
-        height: var(--header-height);
-        display: flex;
-        align-items: center;
-        padding: 0 24px;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #fff;
-        flex-shrink: 0;
-    }
-
-    .header-title {
-        font-size: 1.2rem;
-        font-weight: 500;
-    }
-
-    .content-wrapper {
-      flex-grow: 1;
       overflow-y: auto;
-      padding: 24px;
-      height: calc(100vh - var(--header-height));
-    }
-
-    .overlay {
-      display: none;
-    }
-
-    /* Tablet and Mobile styles */
-    @media (max-width: 992px) {
-      .menu-toggle {
-        display: block;
-      }
-
-      .menu-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-      }
-
-      .menu-container.is-open {
-        transform: translateX(0);
-      }
-
-      .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.4);
-        z-index: 999;
-        display: block;
-      }
-
-      .main-content {
-        width: 100%;
-      }
+      padding: 20px;
+      background-color: #f2f2f2;
     }
   `]
 })
 export class AppLayoutComponent {
-  isMenuOpen = signal(false);
+  isMenuCollapsed = signal(false);
+  searchTerm = signal('');
 
   toggleMenu() {
-    this.isMenuOpen.update(v => !v);
+    this.isMenuCollapsed.update(v => !v);
+  }
+  
+  onSearch(event: Event) {
+    this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
-  closeMenu() {
-    if (this.isMobile()) {
-      this.isMenuOpen.set(false);
+  clearSearch() {
+    this.searchTerm.set('');
+  }
+
+  onMenuItemClicked() {
+    if (window.innerWidth < 768) { 
+      this.isMenuCollapsed.set(true);
     }
-  }
-
-  isMobile(): boolean {
-    return window.innerWidth <= 992;
   }
 }

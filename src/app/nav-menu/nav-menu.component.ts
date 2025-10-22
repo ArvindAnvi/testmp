@@ -1,39 +1,58 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal, input, computed } from '@angular/core';
 import { RouterModule, RouterLinkActive } from '@angular/router';
+
+interface NavItem {
+  label: string;
+  routerLink?: string;
+  icon?: string;
+  items?: NavItem[];
+}
 
 @Component({
   selector: 'app-nav-menu',
   imports: [RouterModule, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="nav-menu">
-      <div class="logo-container">
-        <img src="assets/logo.svg" alt="App Logo" class="logo">
-        <span class="app-title">My App</span>
-      </div>
-      <nav class="navigation-links">
-        <a routerLink="/" (click)="onLinkClick()" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link">Home</a>
-        <a routerLink="/about" (click)="onLinkClick()" routerLinkActive="active-link">About</a>
-        <div class="sub-menu-container" [class.open]="isSubMenuOpen()">
-          <a (click)="toggleSubMenu()" [class.active-link]="isSubMenuOpen()" class="sub-menu-toggle">
-            <span class="menu-icon">🌭</span>
-            <span class="menu-text">Hot Dog</span>
-            <span class="sub-menu-arrow"></span>
-          </a>
-          <div class="sub-menu">
-            <a routerLink="/ketchup" (click)="onLinkClick()" routerLinkActive="active-link">Ketchup</a>
-            <a routerLink="/mustard" (click)="onLinkClick()" routerLinkActive="active-link">Mustard</a>
-          </div>
+    <div class="nav-menu" [class.is-collapsed]="isCollapsed()">
+        <div class="menu-header">
+            @if (!isCollapsed()) {
+              <span class="menu-title">Menu</span>
+              <button (click)="toggleAll()" class="collapse-all-button" [class.is-open]="areAnyOpen()" title="Toggle all sections">
+                  <span class="icon">^</span>
+              </button>
+            }
         </div>
-        <a routerLink="/all-resources" (click)="onLinkClick()" routerLinkActive="active-link">All Resources</a>
-        <a routerLink="/favorites" (click)="onLinkClick()" routerLinkActive="active-link">Favorites</a>
-        <a routerLink="/settings" (click)="onLinkClick()" routerLinkActive="active-link">Settings</a>
-        <a routerLink="/project-1" (click)="onLinkClick()" routerLinkActive="active-link">Project 1</a>
-        <a routerLink="/project-2" (click)="onLinkClick()" routerLinkActive="active-link">Project 2</a>
-        <a routerLink="/project-3" (click)="onLinkClick()" routerLinkActive="active-link">Project 3</a>
-        <a routerLink="/project-4" (click)="onLinkClick()" routerLinkActive="active-link">Project 4</a>
-        <a routerLink="/project-5" (click)="onLinkClick()" routerLinkActive="active-link">Project 5</a>
-        <a routerLink="/project-6" (click)="onLinkClick()" routerLinkActive="active-link">Project 6</a>
+      <nav class="navigation-links">
+        @for (item of filteredMenuItems(); track item.label) {
+          @if (item.items) {
+            <div class="nested-menu">
+                <a (click)="toggleMenuSection(item.label)" class="nested-menu-toggle" [class.open]="isMenuSectionOpen(item.label)">
+                    @if (!isCollapsed()) {
+                        <span class="chevron"></span>
+                        <span class="menu-text">{{ item.label }}</span>
+                    } @else {
+                        <span class="menu-icon" [title]="item.label">{{ item.icon }}</span>
+                    }
+                </a>
+                @if (!isCollapsed() && isMenuSectionOpen(item.label)) {
+                    <div class="sub-links">
+                        @for (subItem of item.items; track subItem.label) {
+                            <a [routerLink]="subItem.routerLink" (click)="onLinkClick()" routerLinkActive="active-link">{{ subItem.label }}</a>
+                        }
+                    </div>
+                }
+            </div>
+          } @else {
+            <a [routerLink]="item.routerLink" (click)="onLinkClick()" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link" [title]="isCollapsed() ? item.label : ''">
+                <span class="menu-icon">{{ item.icon }}</span>
+                @if (!isCollapsed()) { <span class="menu-text">{{ item.label }}</span> }
+            </a>
+          }
+          @if (item.label === 'Tags') { <div class="separator"></div> }
+        }
+        @if (filteredMenuItems().length === 0) {
+          <div class="no-results">No results found</div>
+        }
       </nav>
     </div>
   `,
@@ -47,125 +66,251 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
       display: flex;
       flex-direction: column;
       height: 100%;
-      background-color: #ffffff;
-      padding: 24px;
+      background-color: #f8f9fa;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 250px;
       border-right: 1px solid #e0e0e0;
-      box-sizing: border-box; /* Ensures padding is included in height */
     }
-
-    .logo-container {
+    
+    .nav-menu.is-collapsed {
+      width: 50px;
+    }
+    
+    .menu-header {
       display: flex;
       align-items: center;
-      margin-bottom: 30px;
-      padding: 0 10px;
+      justify-content: space-between;
+      padding: 0 15px;
+      height: 50px;
+      border-bottom: 1px solid #e0e0e0;
       flex-shrink: 0;
     }
 
-    .logo {
-      height: 40px;
-      margin-right: 15px;
+    .menu-title {
+        font-weight: 600;
+        font-size: 1rem;
     }
 
-    .app-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #333;
+    .collapse-all-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #333;
+        padding: 0;
+        line-height: 1;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .collapse-all-button .icon {
+        display: inline-block;
+        transform: rotate(0deg);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .collapse-all-button.is-open .icon {
+        transform: rotate(180deg);
     }
 
     .navigation-links {
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
       flex-grow: 1;
-      min-height: 0; /*  flexbox scroll fix */
-    }
-    
-    /* Custom Scrollbar Styling */
-    .navigation-links::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .navigation-links::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-
-    .navigation-links::-webkit-scrollbar-thumb {
-      background: #ccc;
-      border-radius: 10px;
-    }
-
-    .navigation-links::-webkit-scrollbar-thumb:hover {
-      background: #aaa;
+      overflow-y: auto;
+      padding-top: 10px;
     }
 
     .navigation-links a {
       text-decoration: none;
-      color: #555;
-      padding: 15px 20px;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      color: #333;
+      padding: 10px 15px;
+      border-left: 3px solid transparent;
       font-weight: 500;
-      transition: background-color 0.2s ease, color 0.2s ease;
-      flex-shrink: 0;
+      transition: background-color 0.2s ease, color 0.2s ease, border-left-color 0.2s ease;
       display: flex;
       align-items: center;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    
+    .nav-menu.is-collapsed .navigation-links a {
+        justify-content: center;
+        padding: 10px 0;
     }
 
     .navigation-links a:hover {
-      background-color: #f4f4f4;
-      color: #007bff;
+      background-color: #e9ecef;
+      color: #0078d4;
     }
 
     .navigation-links a.active-link {
-      background-color: #e6f2ff;
-      color: #007bff;
+      background-color: #e1f0ff;
+      color: #0078d4;
+      border-left-color: #0078d4;
       font-weight: 600;
     }
-
-    .sub-menu-container .sub-menu-toggle {
-      justify-content: space-between;
-      cursor: pointer;
+    
+    .nav-menu.is-collapsed .navigation-links a.active-link {
+        border-left-color: transparent;
     }
 
     .menu-icon {
       margin-right: 10px;
+      width: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+    
+    .nav-menu.is-collapsed .menu-icon {
+        margin-right: 0;
+    }
+    
+    .nav-menu.is-collapsed .menu-text {
+      display: none;
     }
 
-    .sub-menu-arrow {
-      border: solid #555;
-      border-width: 0 2px 2px 0;
-      display: inline-block;
-      padding: 3px;
-      transform: rotate(45deg);
-      transition: transform 0.3s ease;
+    .separator {
+        height: 1px;
+        background-color: #dee2e6;
+        margin: 10px 15px;
+    }
+    
+    .nested-menu-toggle {
+        justify-content: flex-start;
     }
 
-    .sub-menu-container.open .sub-menu-arrow {
-      transform: rotate(-135deg);
+    .chevron {
+        border: solid #333;
+        border-width: 0 2px 2px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(45deg);
+        transition: transform 0.3s ease-in-out;
+        margin-right: 12px;
+        margin-left: 5px;
+    }
+    
+    .nested-menu-toggle.open .chevron {
+        transform: rotate(-135deg);
     }
 
-    .sub-menu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-in-out;
-      padding-left: 20px;
+    .sub-links {
+        padding-left: 20px;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease-in-out;
+    }
+    
+    .nested-menu-toggle.open + .sub-links {
+      max-height: 500px;
     }
 
-    .sub-menu-container.open .sub-menu {
-      max-height: 500px; /* Adjust as needed */
+    .sub-links a {
+        padding-left: 38px;
+        font-weight: 400;
+        color: #555;
+    }
+    
+    .no-results {
+      padding: 15px;
+      text-align: center;
+      color: #777;
+    }
+
+    .nav-menu.is-collapsed .menu-header {
+      padding: 0;
+      justify-content: center;
     }
   `]
 })
 export class NavMenuComponent {
+  isCollapsed = input<boolean>(false);
+  searchTerm = input<string>('');
   menuItemClicked = output<void>();
-  isSubMenuOpen = signal(false);
+  openSections = signal<string[]>([]);
+
+  menuItems = signal<NavItem[]>([
+    { label: 'Resource Manager', routerLink: '/', icon: '⚿' },
+    { label: 'All resources', routerLink: '/all-resources', icon: '🗂️' },
+    { label: 'Favorite resources', routerLink: '/favorites', icon: '⭐' },
+    { label: 'Resource groups', routerLink: '/resource-groups', icon: '📁' },
+    { label: 'Tags', routerLink: '/tags', icon: '🏷️' },
+    {
+      label: 'Organization',
+      icon: '🏢',
+      items: [
+        { label: 'Service groups', routerLink: '/service-groups' },
+        { label: 'Management groups', routerLink: '/management-groups' },
+        { label: 'Subscriptions', routerLink: '/subscriptions' },
+      ],
+    },
+    {
+      label: 'Tools',
+      icon: '🔧',
+      items: [
+        { label: 'Resource graph explorer', routerLink: '/graph-explorer' },
+        { label: 'Resource graph queries', routerLink: '/graph-queries' },
+        { label: 'Resource visualizer', routerLink: '/visualizer' },
+      ],
+    },
+  ]);
+
+  filteredMenuItems = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    if (!term) {
+      return this.menuItems();
+    }
+
+    const filteredItems: NavItem[] = [];
+
+    for (const item of this.menuItems()) {
+      if (item.label.toLowerCase().includes(term)) {
+        filteredItems.push(item);
+      } else if (item.items) {
+        const matchingChildren = item.items.filter(child => child.label.toLowerCase().includes(term));
+        if (matchingChildren.length > 0) {
+          filteredItems.push({ ...item, items: matchingChildren });
+        }
+      }
+    }
+    
+    if (term) {
+      const openOnFilter = filteredItems
+          .filter(i => i.items && i.items.length > 0)
+          .map(i => i.label);
+      this.openSections.set(openOnFilter);
+    }
+
+    return filteredItems;
+  });
+
+  areAnyOpen = computed(() => this.openSections().length > 0);
 
   onLinkClick() {
     this.menuItemClicked.emit();
   }
 
-  toggleSubMenu() {
-    this.isSubMenuOpen.set(!this.isSubMenuOpen());
+  isMenuSectionOpen(label: string): boolean {
+    return this.openSections().includes(label);
+  }
+
+  toggleMenuSection(label: string) {
+    if (this.isCollapsed()) return;
+
+    this.openSections.update(sections => {
+        const index = sections.indexOf(label);
+        if (index > -1) {
+            return [...sections.slice(0, index), ...sections.slice(index + 1)];
+        } else {
+            return [...sections, label];
+        }
+    });
+  }
+
+  toggleAll() {
+    if (this.areAnyOpen()) {
+      this.openSections.set([]);
+    } else {
+      const allSectionLabels = this.menuItems().filter(i => i.items).map(i => i.label);
+      this.openSections.set(allSectionLabels);
+    }
   }
 }
